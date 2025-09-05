@@ -2,8 +2,8 @@
   "type": "component",
   "metadata": {},
   "schema": {
-    "name": "bb-component-SuperFieldText",
-    "friendlyName": "Super Field - Text",
+    "name": "bb-component-SuperFieldTextMask",
+    "friendlyName": "Super Field - Text Mask",
     "description": "A Text Input Field component for Budibase",
     "icon": "ABC",
     "styles": [
@@ -73,7 +73,7 @@
         "type": "text",
         "label": "Input Mask",
         "key": "mask",
-        "hidden": true
+        "placeholder": "e.g., (999) 999-9999"
       },
       {
         "type": "validation/string",
@@ -250,6 +250,6 @@
       }
     ]
   },
-  "hash": "b42a94b4504b5ead72f7812a4b6ca37becd5e877",
+  "hash": "00b1de4fd70ea8d0251d95f1fbdc6723184e11cd",
   "version": "1.0.0"
 }
