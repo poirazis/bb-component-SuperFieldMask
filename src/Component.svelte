@@ -147,7 +147,7 @@
       {value}
       {fieldSchema}
       {autofocus}
-      mask={mask}
+      {mask}
       on:change={(e) => handleChange(e.detail)}
     />
     {#if buttons?.length}
