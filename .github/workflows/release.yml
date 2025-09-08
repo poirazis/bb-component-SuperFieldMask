@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ${{ github.workspace }}/bb-component-SuperFieldTextMask
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org"
+          scope: "@poirazis"
+      - name: Make the production plugin bundle
+        run: |
+          cd bb-component-SuperFieldTextMask
+          release_version=$(cat package.json | jq -r '.version')
+          echo "RELEASE_VERSION=$release_version" >> $GITHUB_ENV
+          yarn
+          yarn build
+      - name: Perform Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: v${{ env.RELEASE_VERSION }}
+          tag_name: v${{ env.RELEASE_VERSION }}
+          generate_release_notes: true
+          files: |
+            ${{ github.workspace }}/bb-component-SuperFieldTextMask/dist/*.tar.gz
+      - name: Configure npm
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          npm config set @poirazis:registry=https://registry.npmjs.org/
+      - name: Publish to npm
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd bb-component-SuperFieldTextMask
+          # Determine npm tag based on version
+          if [[ "${{ env.RELEASE_VERSION }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            NPM_TAG="latest"
+          elif [[ "${{ env.RELEASE_VERSION }}" =~ -alpha ]]; then
+            NPM_TAG="alpha"
+          elif [[ "${{ env.RELEASE_VERSION }}" =~ -beta ]]; then
+            NPM_TAG="beta"
+          elif [[ "${{ env.RELEASE_VERSION }}" =~ -rc ]]; then
+            NPM_TAG="rc"
+          else
+            NPM_TAG="beta"
+          fi
+          echo "Publishing with tag: $NPM_TAG"
+          npm publish --access public --tag $NPM_TAG
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -6,6 +6,19 @@
     CellStringMask,
   } from "@poirazis/supercomponents-shared";
 
+  // Preset mask patterns for common use cases
+  const MASK_PRESETS = {
+    none: null,
+    phoneUS: "(000) 000-0000",
+    phoneIntl: "+0 (000) 000-0000",
+    ssn: "000-00-0000",
+    creditCard: "0000 0000 0000 0000",
+    dateUS: "00/00/0000",
+    zipCode: "00000",
+    time12h: "00:00 AM",
+    time24h: "00:00",
+  };
+
   const { styleable, enrichButtonActions, Provider, builderStore } =
     getContext("sdk");
   const component = getContext("component");
@@ -18,24 +31,21 @@
   const groupColumns = getContext("field-group-columns");
   const groupDisabled = getContext("field-group-disabled");
 
-  export let field = "Text Field";
+  export let field = "Masked Text Field";
   export let label;
   export let span = 6;
   export let placeholder;
   export let defaultValue;
-  export let template;
   export let disabled;
   export let readonly;
   export let validation;
   export let helpText;
   export let align;
   export let mask;
+  export let maskPreset = "none";
   export let buttons = [];
-  export let inFieldGroup;
 
   export let onChange;
-  export let debounced;
-  export let debounceDelay;
   export let autofocus;
   export let invisible = false;
 
@@ -52,8 +62,6 @@
   let fieldSchema;
   let value = defaultValue;
   let unsubscribe;
-
-  $: setDefaultValue(defaultValue);
 
   $: unsubscribe = formField?.subscribe((value) => {
     fieldState = value?.fieldState;
@@ -79,25 +87,18 @@
 
   $: error = fieldState?.error;
   $: value = fieldState?.value;
+  $: setDefaultValue(defaultValue);
 
-  $: _inFieldGroup = groupColumns ? true : false;
-
-  $: if (
-    _inFieldGroup !== inFieldGroup &&
-    $component.selected &&
-    $builderStore.inBuilder
-  ) {
-    builderStore.actions.updateProp("inFieldGroup", _inFieldGroup);
-  }
+  // Determine effective mask based on preset or custom input
+  $: effectiveMask =
+    maskPreset === "custom" ? mask : MASK_PRESETS[maskPreset] || null;
 
   $: cellOptions = {
-    placeholder: placeholder || field,
+    placeholder: placeholder || (maskPreset === "none" ? field : ""),
     defaultValue,
     disabled: disabled || groupDisabled || fieldState?.disabled,
-    template,
     readonly: readonly || fieldState?.readonly,
     icon,
-    debounce: debounced ? debounceDelay : false,
     align,
     error: fieldState?.error,
     role,
@@ -113,7 +114,7 @@
           ? "none"
           : $component.styles.normal.display,
       opacity: invisible && $builderStore.inBuilder ? 0.6 : 1,
-      "grid-column": span < 7 ? "span " + span : "span " + groupColumns * 6,
+      "grid-column": groupColumns ? `span ${span}` : "span 1",
 
       flex: span > 6 ? "auto" : "none",
     },
@@ -147,7 +148,7 @@
       {value}
       {fieldSchema}
       {autofocus}
-      {mask}
+      mask={effectiveMask}
       on:change={(e) => handleChange(e.detail)}
     />
     {#if buttons?.length}

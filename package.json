@@ -1,6 +1,6 @@
 {
-  "name": "bb-component-SuperFieldTextMask",
-  "version": "1.0.0",
+  "name": "bb-component-SuperFieldMask",
+  "version": "1.0.3",
   "description": "A Text Input Field with Mask For Budibase",
   "author": "Michael Poirazi",
   "license": "MIT",
@@ -33,5 +33,8 @@
     "svelte-preprocess": "^5.1.4",
     "tar": "^6.2.1",
     "typescript": "^5.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

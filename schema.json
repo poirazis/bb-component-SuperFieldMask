@@ -2,8 +2,8 @@
   "type": "component",
   "metadata": {},
   "schema": {
-    "name": "bb-component-SuperFieldTextMask",
-    "friendlyName": "Super Field - Text Mask",
+    "name": "bb-component-SuperFieldMask",
+    "friendlyName": "Super Field - Mask",
     "description": "A Text Input Field component for Budibase",
     "icon": "ABC",
     "styles": ["size"],
@@ -31,7 +31,7 @@
         "type": "field/string",
         "label": "Field",
         "key": "field",
-        "defaultValue": "Text Field"
+        "defaultValue": "Masked Text Field"
       },
       {
         "type": "text",
@@ -56,22 +56,58 @@
       },
       {
         "type": "text",
-        "label": "Format value",
-        "key": "template",
-        "supportsConditions": false,
-        "nested": true,
-        "resetOn": "field"
-      },
-      {
-        "type": "text",
         "label": "Help text",
         "key": "helpText"
+      },
+      {
+        "type": "select",
+        "label": "Mask Preset",
+        "key": "maskPreset",
+        "defaultValue": "none",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "Phone (US)",
+            "value": "phoneUS"
+          },
+          {
+            "label": "Phone (International)",
+            "value": "phoneIntl"
+          },
+          {
+            "label": "Social Security Number",
+            "value": "ssn"
+          },
+          {
+            "label": "Credit Card",
+            "value": "creditCard"
+          },
+          {
+            "label": "Date (MM/DD/YYYY)",
+            "value": "dateUS"
+          },
+          {
+            "label": "ZIP Code",
+            "value": "zipCode"
+          },
+          {
+            "label": "Custom",
+            "value": "custom"
+          }
+        ]
       },
       {
         "type": "text",
         "label": "Input Mask",
         "key": "mask",
-        "placeholder": "e.g., (999) 999-9999"
+        "placeholder": "e.g., (000) 000-0000",
+        "dependsOn": {
+          "setting": "maskPreset",
+          "value": "custom"
+        }
       },
       {
         "type": "validation/string",
@@ -121,12 +157,6 @@
         "type": "boolean",
         "label": "Grab Focus",
         "key": "autofocus",
-        "defaultValue": false
-      },
-      {
-        "type": "boolean",
-        "label": "Debounced",
-        "key": "debounced",
         "defaultValue": false
       },
       {
@@ -223,22 +253,6 @@
         "key": "span",
         "defaultValue": 6,
         "min": 2
-      },
-      {
-        "tag": "style",
-        "type": "number",
-        "label": "Debounce Delay",
-        "key": "debounceDelay",
-        "minValue": "200",
-        "defaultValue": 750,
-        "dependsOn": "debounced"
-      },
-      {
-        "tag": "style",
-        "type": "boolean",
-        "key": "showDirty",
-        "label": "Show Dirty",
-        "defaultValue": false
       }
     ]
   }

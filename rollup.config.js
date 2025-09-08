@@ -60,7 +60,7 @@ const hash = () => ({
 // Custom plugin to bundle up our files after building
 const bundle = () => ({
   async writeBundle() {
-    const bundleName = `${pkg.name}-${pkg.version}.tar.gz`;
+    const bundleName = `bb-component-SuperFieldTextMask-${pkg.version}.tar.gz`;
     return tar
       .c({ gzip: true, cwd: "dist" }, [
         "plugin.min.js",
