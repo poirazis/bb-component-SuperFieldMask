@@ -1,6 +1,6 @@
 {
   "name": "bb-component-SuperFieldMask",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A Text Input Field with Mask For Budibase",
   "author": "Michael Poirazi",
   "license": "MIT",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@crownframework/svelte-error-boundary": "^1.0.3",
-    "@poirazis/supercomponents-shared": "^1.0.11"
+    "@poirazis/supercomponents-shared": "latest"
   },
   "devDependencies": {
     "@budibase/backend-core": "^2.33.14",
