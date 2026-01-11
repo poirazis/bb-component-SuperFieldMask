@@ -1,12 +1,16 @@
 {
   "type": "component",
-  "metadata": {},
+  "metadata": {
+    "svelteMajor": 5
+  },
   "schema": {
     "name": "bb-component-SuperFieldMask",
     "friendlyName": "Super Field - Mask",
     "description": "A Text Input Field component for Budibase",
     "icon": "ABC",
-    "styles": ["size"],
+    "styles": [
+      "size"
+    ],
     "context": [
       {
         "type": "static",
@@ -217,8 +221,14 @@
         "label": "Field Mode",
         "defaultValue": "formInput",
         "options": [
-          { "label": "Form Input", "value": "formInput" },
-          { "label": "Inline Input", "value": "inlineInput" }
+          {
+            "label": "Form Input",
+            "value": "formInput"
+          },
+          {
+            "label": "Inline Input",
+            "value": "inlineInput"
+          }
         ]
       },
       {
