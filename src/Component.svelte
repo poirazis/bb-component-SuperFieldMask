@@ -19,8 +19,13 @@
     time24h: "00:00",
   };
 
-  const { styleable, enrichButtonActions, Provider, builderStore } =
-    getContext("sdk");
+  const {
+    styleable,
+    enrichButtonActions,
+    Provider,
+    builderStore,
+    processStringSync,
+  } = getContext("sdk");
   const component = getContext("component");
   const allContext = getContext("context");
 
@@ -71,7 +76,7 @@
 
   $: formStep = formStepContext ? $formStepContext || 1 : 1;
   $: labelPos =
-    groupLabelPosition && labelPosition == "fieldGroup"
+    groupLabelPosition !== undefined && labelPosition == "fieldGroup"
       ? groupLabelPosition
       : labelPosition;
 
@@ -98,7 +103,7 @@
     defaultValue,
     disabled: disabled || groupDisabled || fieldState?.disabled,
     readonly: readonly || fieldState?.readonly,
-    icon,
+    icon: icon ? "ph ph-" + icon : undefined,
     align,
     error: fieldState?.error,
     role,
@@ -123,7 +128,7 @@
   const handleChange = (newValue) => {
     if (!form) value = newValue;
     fieldApi?.setValue(newValue);
-    onChange?.({ value: newValue });
+    onChange?.();
   };
 
   const setDefaultValue = (val) => {
@@ -153,14 +158,17 @@
     />
     {#if buttons?.length}
       <div class="inline-buttons">
-        {#each buttons as { text, onClick, quiet, type, size, icon }}
+        {#each buttons as { icon, onClick, ...rest }}
           <SuperButton
-            {quiet}
-            {disabled}
-            {size}
-            {type}
-            {text}
-            {icon}
+            {...rest}
+            icon={"ph ph-" + icon}
+            disabled={processStringSync(
+              rest.disabledTemplate ?? "",
+              $allContext
+            ) === true ||
+              disabled ||
+              groupDisabled ||
+              fieldState?.disabled}
             onClick={enrichButtonActions(onClick, $allContext)}
           />
         {/each}
