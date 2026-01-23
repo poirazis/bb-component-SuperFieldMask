@@ -87,7 +87,7 @@
     disabled,
     readonly,
     validation,
-    formStep
+    formStep,
   );
 
   $: error = fieldState?.error;
@@ -126,19 +126,22 @@
   };
 
   const handleChange = (newValue) => {
+    console.log("Masked Field Change:", newValue);
     if (!form) value = newValue;
     fieldApi?.setValue(newValue);
     onChange?.();
   };
 
   const setDefaultValue = (val) => {
-    value = val;
+    if (val) value = val;
   };
 
   onDestroy(() => {
     fieldApi?.deregister();
     unsubscribe?.();
   });
+
+  $: console.log("Masked Field Value:", fieldState?.value);
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -164,7 +167,7 @@
             icon={"ph ph-" + icon}
             disabled={processStringSync(
               rest.disabledTemplate ?? "",
-              $allContext
+              $allContext,
             ) === true ||
               disabled ||
               groupDisabled ||
